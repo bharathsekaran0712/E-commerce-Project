@@ -20,32 +20,43 @@ const ImageSlider = () => {
         return ()=>clearInterval(interval)
     },[])
 
-    // const prevSlide = () =>{
-    //     setCurrent((prev)=>(prev === 0 ? images.length - 1 : prev - 1))
-    // }
+    const prevSlide = () =>{
+        setCurrent((prev)=>(prev === 0 ? images.length - 1 : prev - 1))
+    }
 
-    // const nextSlide = () => {
-    //     setCurrent((prev = (prev + 1) % images.length))
-    // }
+    const nextSlide = () => {
+        setCurrent((prev => (prev + 1) % images.length))
+    }
   return (
     <div className='relative w-full shadow-lg overflow-hidden '>
-        {/* sliders */}
+    
         <div className='flex transition-transform duration-700 ease-in-out' style={{transform:
-            `translateX(-${current * 100}%`
+            `translateX(-${current * 100}%)`
         }}>
             {images.map((image,index)=>(
                 <img src={image} key={index} className='h-75 w-full md:h-117.5 object-cover shrink-0'/>
             ))}
         </div>
-        {/* Previous */}
-        {/* <button onClick={prevSlide} className='absolute left-4 top-1/2 bg-black/40 hover:bg-black/60 text-white p-2 rounded-full transition'>
+        
+        <button onClick={prevSlide} className='absolute left-4 top-1/2 bg-black/40 hover:bg-black/60 text-white p-2 rounded-full transition'>
             <ChevronLeft/>
-        </button> */}
+        </button>
 
-        {/* Next */}
-        {/* <button onClick={nextSlide} className='absolute right-4 top-1/2 bg-black/40 hover:bg-black/60 text-white p-2 rounded-full transition'>
+        
+        <button onClick={nextSlide} className='absolute right-4 top-1/2 bg-black/40 hover:bg-black/60 text-white p-2 rounded-full transition'>
             <ChevronRight/>
-        </button> */}
+        </button>
+
+        <div className="absolute bottom-4 w-full flex justify-center gap-2">
+          {images.map((_, index) => (
+          <div 
+            key={index}
+            className={`w-3 h-3 rounded-full ${
+            current === index ? "bg-white" : "bg-gray-400"
+            }`}
+          />
+            ))}
+         </div>
     </div>
   )
 }

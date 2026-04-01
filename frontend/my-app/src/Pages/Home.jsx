@@ -1,93 +1,120 @@
-import React from 'react'
+import React, { useEffect } from 'react'
 import Navbar from '../Components/Navbar'
+import { Toaster } from 'react-hot-toast'
+import toast from 'react-hot-toast'
 import ImageSlider from '../Components/ImageSlider'
 import Footer from '../Components/Footer'
-import Product from '../Components/Product'
 import PageTitle from '../Components/PageTitle'
+import { useState } from 'react'
+import Rating from '../Components/Rating'
+import { Link } from 'react-router-dom'
+import { useCart } from '../features/context/CartContext'
 
-const Products = [{
-        "name": "N5 Chanel",
-        "price": 24500.67,
-        "description": "Chanel N°5 is one of the most famous and iconic perfumes in the world.",
-        "ratings": 4.5,
-        "images": [
-            {
-                "image": "/src/assets/perfume.jpg"
-            },
-        ],
-        "category": "Perfume",
-        "seller": "Amazon",
-        "stock": 5,
-        "numOfReviews": 15,
-        "reviews": []
-    },
-    {
-        "name": "Omega Watch",
-        "price": 1500.32,
-        "description": "Minix watches are exclusively designed with aluminium materials.",
-        "ratings": 3.5,
-        "images": [
-            {
-                "image": "/src/assets/watch1.jpg"
-            }
-        ],
-        "category": "Accessories",
-        "seller": "Flipkart",
-        "stock": 9,
-        "numOfReviews": 5,
-        "reviews": []
-    },
-    {
-        "name": "Nike Running shoe",
-        "price": 2000.57,
-        "description": "Shoe specially made for the running comfort.",
-        "ratings": 2,
-        "images": [
-            {
-                "image": "/src/assets/shoe1.jpg"
-            }
-        ],
-        "category": "Sporting",
-        "seller": "Nike",
-        "stock": 9,
-        "numOfReviews": 12,
-        "reviews": []
-    },
-    {
-        "name": "RayBan Sunglass",
-        "price": 1700.45,
-        "description": "Sunglass for elegance and styles, made of strong material.",
-        "ratings": 4,
-        "images": [
-          {
-            "image": "/src/assets/rayban.jpg"
-          }
-        ],
-        "category": "Fashion",
-        "seller": "Ebay",
-        "stock": 9,
-        "numOfReviews": 12,
-        "reviews": []
-      }
 
-]
 
 const Home = () => {
+  
+  const [products,setProducts] = useState([])
+  const [cartItems,setCartItems] = useState([])
+
+  const { addToCart } = useCart()
+
+  useEffect(()=>{
+    fetchCartFromBackend()
+    getAllProducts()
+  },[])
+
+  const getAllProducts = async () => {
+    try {
+
+      const response = await fetch("http://localhost:8000/api/v1/products/getAllProducts")
+
+      const data = await response.json()
+
+      // console.log(data)
+
+      setProducts(data.products)
+
+    } catch (error) {
+      console.log("Error fetching products", error)
+    }
+  }
+
+  const fetchCartFromBackend = async () => {
+    try {
+        console.log(fetchCartFromBackend,"fetchCartFromBackend")
+        const token = localStorage.getItem("token");
+        console.log(token,"token")
+        if (!token) return;
+
+      const res = await fetch("http://localhost:8000/api/getCart", {
+        method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+              Authorization: `Bearer ${token}`,
+            },
+        body:JSON.stringify({userId:JSON.parse(localStorage.getItem("user"))._id})
+      });
+
+      const data = await res.json();
+
+      if (data && data.length) {
+        setCartItems(data[0].items);
+      }
+    } catch (error) {
+      console.log("Cart fetch error:", error);
+    }
+  };
+
+
+
   return (<>
     <PageTitle title={"Home | E-commerce"}/>
-    <Navbar/>
+    <Navbar cartItems={cartItems}/>
+    
     <ImageSlider/>
     <div className='mt-12 p-8 flex flex-col items-center justify-around text-gray-900'>
+      <Toaster/>
       <h1 className="text-4xl font-semibold mb-8 text-blue-700 text-center drop-shadow-sm">Latest Collections</h1>
+
       <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-8">
-        {Products.map((product,index)=>(
-          <Product key={index}
-           product= {product}/>
-        ))}
-      </div>
-    </div> 
-    <Footer/>
-    </>
+
+        {products.filter((product)=> product.price >= 59000).map((product)=>(
+           
+          <div className='bg-white rounded-xl shadow-sm hover:shadow-lg transition overflow-hidden
+            border border-slate-100'>
+          <Link to={`/product/${product._id}`} key={product._id} >
+          <div className='h-66 overflow-hidden'>
+          <img src={product.image} alt={product.name} className='h-full w-full
+          group-hover:scale-105 transition'/>
+          </div>
+          </Link>
+
+          <div className='px-4 pb-4 '>
+           
+          <h3 className='text-lg font-semibold text-gray-800 line-clamp-1'>{product.name}</h3>
+          <p className='text-sm text-gray-500 line-clamp-2 pb-2'>{product.description}</p>
+          </div>
+
+          <div className='px-4 pb-4 space-y-2'>
+           <div className='flex items-center gap-2'>
+           <Rating/>
+           <span className='text-xs text-gray-500 font-semibold' >({product.numOfReviews} reviews)</span>
+          </div>
+
+          <div className='flex items-center justify-between'>
+            <span className='text-blue-600 font-bold text-lg'>₹ {product.price}</span>
+            <button onClick={()=> addToCart({...product,quantity:1}).then((res)=>{fetchCartFromBackend();toast.success(`${product.name} is added to cart`)})}  className='bg-blue-600 text-white px-4 py-1.5 rounded-md text-sm 
+            hover:bg-blue-600 transition hover:scale-105'>Add to Cart</button>
+         </div>
+         </div>
+         </div>
+         
+           ))}
+        </div>
+        </div> 
+        <Footer/>
+      </>
   )
 }
 

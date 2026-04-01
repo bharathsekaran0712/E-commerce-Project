@@ -1,19 +1,26 @@
 import React, { useState } from 'react'
 import {useNavigate} from "react-router-dom"
 import "./Login.css"
-import { Mail } from 'lucide-react'
+import { Toaster } from 'react-hot-toast'
+import toast from 'react-hot-toast'
+import { Link } from 'react-router-dom'
+import {EyeIcon, EyeOffIcon, Mail } from 'lucide-react'
 import { KeyRound } from 'lucide-react'
 
 const Login = () => {
+    
     const [email,setEmail] = useState("")
     const [password,setPassword] = useState("")
+    const [showPasword, setShowPassword] = useState(false)
     const [loading,setLoading] = useState(false)
 
+    const navigate = useNavigate()
+
     const loginUser = async()=>{
-        const navigate = useNavigate()
+        
 
         if(!email || !password){
-            alert("Please enter email or password")
+            toast.error("Please enter email or password")
             return
         }
 
@@ -34,15 +41,19 @@ const Login = () => {
         
         if(data.success){
             localStorage.setItem("token",data.token)
-            alert("Login successful")
+            localStorage.setItem("user", JSON.stringify(data.user))
+            
+            toast.success("Login successful")
 
-            navigate("/")
+            setTimeout(()=>{
+                navigate("/Home")
+            },[1500])
         }else{
-            alert("data.message")
+            toast.error(data.message)
         } 
         } catch (error) {
             console.log("error")
-            alert("Server error")
+            toast.error("Server error")
         }finally{
             setLoading(false)
         }
@@ -51,6 +62,7 @@ const Login = () => {
 
   return (
     <div className='min-h-screen flex items-center justify-center bg-gray-100' id='body'>
+        <Toaster position='top-center'/>
         <div className="bg-white p-8 rounded-2xl shadow-lg w-96">
         
         <h2 className='text-2xl font-bold text-center mb-6'>Login</h2>
@@ -58,23 +70,35 @@ const Login = () => {
         
         <div className='space-y-4 relative overflow-hidden'>
         <input type="email" className="w-full border p-2 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-400"
-        placeholder='    Email'
+        placeholder='Email'
         value={email}
         onChange={(e)=>{setEmail(e.target.value)}} />
-        <Mail  size={17} className='absolute bottom-17 left-1'/>
 
-        <input type="password" className="w-full border p-2 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-400"
-        placeholder='    Password'
+        <div className='relatve flex'>
+
+        <input type={showPasword ? "text" : "password"} className="relative w-full border p-2 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-400 mb-4"
+        placeholder='Password'
         value={password}
         onChange={(e)=>{setPassword(e.target.value)}} />
-        <KeyRound  size={17} className='absolute bottom-7 left-1'/>
+
+        <span className='absolute right-4 bottom-7 cursor-pointer hover:text-blue-500'
+         onClick={()=> setShowPassword(!showPasword)}>
+            {showPasword ? <EyeOffIcon size={18}/> : <EyeIcon size={18}/>}
+        </span>
+
+        </div>
         </div>
 
-        <p className='mb-4'>forgot password?</p>
-
-        <button onClick={loginUser} disabled={loading} className='w-full bg-blue-500 text-white p-2 rounded-lg hover:bg-blue-600'>
+        <button onClick={loginUser} className='w-full bg-blue-500 text-white p-2 rounded-lg hover:bg-blue-600'>
             {loading ? "Logging in..." : "Login" }
         </button>
+
+        <p className="text-sm justify-center items-center mb-3">
+         New user?{" "}
+        <Link to="/register" className="text-blue-500 hover:underline">
+        Register
+        </Link>
+        </p>
         </div>
     </div>
   )
