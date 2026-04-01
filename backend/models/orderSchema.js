@@ -27,7 +27,7 @@ const orderSchema = new mongoose.Schema({
             required:true
         },
     },
-    orederItem:[{
+    orderItem:[{
         name:{
             type:String,
             required:true
@@ -53,12 +53,18 @@ const orderSchema = new mongoose.Schema({
     orderStatus:{
         type:String,
         required:true,
-        default:"Processing"
+        enum: ["Processing", "Shipped", "Order Placed", "Cancelled"],
+        default:"Order Placed"
     },
     user:{
         type:mongoose.Schema.ObjectId,
         ref:"User",
-        required:true
+        required:true,
+        unique:true
+    },
+    totalPrice: {
+          type: Number,
+          required: true
     }
 })
 

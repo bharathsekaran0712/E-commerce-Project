@@ -1,4 +1,4 @@
-const user = require("../models/userModel")
+const User = require('../models/userModel')
 const bcrypt = require("bcryptjs")
 const jwt = require("jsonwebtoken")
 
@@ -6,7 +6,7 @@ exports.registerUser = async(req,res)=>{
     try {
         const {name,email,password}=req.body
 
-        const userExists = await user.findOne({email})
+        const userExists = await User.findOne({email:email})
 
         if(userExists){
             return res.status(400).json({
@@ -15,7 +15,7 @@ exports.registerUser = async(req,res)=>{
             })
         }
         const hashPassword = await bcrypt.hash(password,10)
-        const newUser = await user.create({
+        const newUser = await User.create({
             name,
             email,
             password:hashPassword
@@ -36,7 +36,7 @@ exports.registerUser = async(req,res)=>{
 exports.loginUser = async(req,res)=>{
     try {
         const {email,password} = req.body
-        const user = await user.findOne({email})
+        const user = await User.findOne({email})
 
         if(!user){
             return res.status(400).json({
@@ -44,7 +44,7 @@ exports.loginUser = async(req,res)=>{
                 message:"Invalid email"
             })
         }
-        const isPasswordMatch = await bcrypt.compare(password,user.password)
+        const isPasswordMatch = await bcrypt.compare(password, user.password)
 
         if(!isPasswordMatch){
             return res.status(400).json({
@@ -59,8 +59,12 @@ exports.loginUser = async(req,res)=>{
         )
         res.status(200).json({
             success:true,
-            message:"Login successful",
-            token
+            token,
+            user:{
+                _id: user._id,
+                name: user.name,
+                email: user.email
+            }
         })
     } catch (error) {
         res.status(500).json({
@@ -71,26 +75,5 @@ exports.loginUser = async(req,res)=>{
 
 // middleware for protected routes
 
-const userMiddleware = (req,res,next)=>{
- try {
 
-   const token = req.headers.authorization
 
-   if(!token){
-      return res.status(401).json({message:"No token provided"})
-   }
-
-   const decoded = jwt.verify(token,"secretkey")
-
-   req.user = decoded.id
-
-   next()
-
- } catch (error) {
-
-   res.status(401).json({message:"Invalid Token"})
-
- }
-}
-
-module.exports = userMiddleware
