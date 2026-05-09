@@ -9,6 +9,7 @@ import { useState } from 'react'
 import Rating from '../Components/Rating'
 import { Link } from 'react-router-dom'
 import { useCart } from '../features/context/CartContext'
+import Form from '../Components/Form'
 
 
 
@@ -16,6 +17,19 @@ const Home = () => {
   
   const [products,setProducts] = useState([])
   const [cartItems,setCartItems] = useState([])
+  const [showForm,setShowForm] = useState(false)
+  const [formData,setFormData] = useState({
+        name:"",
+        price:"",
+        category:"",
+        image:"",
+        numOfReviews:"",
+        stock:"",
+        description:""
+   })
+  const [editProduct,setEditProduct] = useState(null)
+
+  const user = JSON.parse(localStorage.getItem("user"))
 
   const { addToCart } = useCart()
 
@@ -64,7 +78,66 @@ const Home = () => {
     } catch (error) {
       console.log("Cart fetch error:", error);
     }
-  };
+  }
+
+  const handleSubmit = async (e) => {
+    e.preventDefault()
+
+    try {
+        const url = `http://localhost:8000/api/v1/product/${editProduct._id}`
+
+        const res = await fetch(url, {
+            method:"PUT",
+            headers: {
+                "Content-Type": "application/json",
+                Authorization: `Bearer ${localStorage.getItem("token")}`
+            },
+            body: JSON.stringify(formData)
+        })
+
+        const data = await res.json()
+        console.log(data)
+
+        if (res.ok) {
+            toast.success("Product updated")
+
+            setFormData({
+                name:"",
+                price:"",
+                category:"",
+                image:"",
+                numOfReviews:"",
+                description:""
+            })
+
+            setEditProduct(null)
+            setShowForm(false)
+            getAllProducts()
+        }else{
+            toast.error(data.message || "update failed")
+        }
+
+    } catch (error) {
+        toast.error("Error saving product")
+    }
+}
+
+   const handleEdit = (product) => {
+        setEditProduct(product)
+
+        setFormData({
+            name: product.name,
+            price: product.price,
+            category: product.category,
+            image: product.image,
+            numOfReviews: product.numOfReviews,
+            stock: product.stock,
+            description: product.description
+        })
+
+        setShowForm(true)
+    }
+
 
 
 
@@ -78,6 +151,7 @@ const Home = () => {
       <h1 className="text-4xl font-semibold mb-8 text-blue-700 text-center drop-shadow-sm">Latest Collections</h1>
 
       <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-8">
+
 
         {products.filter((product)=> product.price >= 59000).map((product)=>(
            
@@ -98,14 +172,30 @@ const Home = () => {
 
           <div className='px-4 pb-4 space-y-2'>
            <div className='flex items-center gap-2'>
-           <Rating/>
+           <Rating  viewOnly={true} rating={product.ratings}/>
            <span className='text-xs text-gray-500 font-semibold' >({product.numOfReviews} reviews)</span>
           </div>
 
+          <Form
+              showForm={showForm}
+              setShowForm={setShowForm}
+              formData={formData}
+              setFormData={setFormData}
+              handleSubmit={handleSubmit}
+              editProduct={editProduct}
+              setEditProduct={setEditProduct}
+              />
+
           <div className='flex items-center justify-between'>
             <span className='text-blue-600 font-bold text-lg'>₹ {product.price}</span>
-            <button onClick={()=> addToCart({...product,quantity:1}).then((res)=>{fetchCartFromBackend();toast.success(`${product.name} is added to cart`)})}  className='bg-blue-600 text-white px-4 py-1.5 rounded-md text-sm 
-            hover:bg-blue-600 transition hover:scale-105'>Add to Cart</button>
+            {
+              user.role === "Admin" ? 
+              (<button className='border border-black bg-yellow-500 rounded-lg px-6 py-1' onClick={() => handleEdit(product)}>Edit</button>)
+              :(<button className='bg-blue-600 text-white px-4 py-1.5 rounded-md text-sm 
+                                        hover:bg-blue-600 transition hover:scale-105' onClick={()=> addToCart({...product,quantity:1}).then((res)=>{fetchCartFromBackend();toast.success(`${product.name} is added to cart`)})}>Add to Cart</button>)
+            }
+            {/* <button onClick={()=> addToCart({...product,quantity:1}).then((res)=>{fetchCartFromBackend();toast.success(`${product.name} is added to cart`)})}  className='bg-blue-600 text-white px-4 py-1.5 rounded-md text-sm 
+            hover:bg-blue-600 transition hover:scale-105'>Add to Cart</button> */}
          </div>
          </div>
          </div>

@@ -105,7 +105,7 @@ const ProductDetails = () => {
                                     className='p-4 hover:bg-gray-50 hover:text-amber-600 transition-colors'><Plus size={18} /></button>
                                 </div>
 
-                                <button onClick={() => addToCart({ ...product, quantity })} className='flex-1 bg-blue-600 hover:bg-blue-700 text-white font-bold py-4 px-8
+                                <button onClick={() => addToCart({ ...product, quantity:1 })} className='flex-1 bg-blue-600 hover:bg-blue-700 text-white font-bold py-4 px-8
                             rounded-xl flex items-center justify-center gap-3 transition-all shadow-xl shadow-blue-100 
                             active:scale-95'>
                                     <ShoppingCart />Add to Cart
@@ -114,6 +114,84 @@ const ProductDetails = () => {
                         </div>
                     </div>
                 </div>
+
+    <div className='mt-12 bg-white rounded-2xl p-6 border border-gray-100'>
+    
+    <h2 className='text-2xl font-bold text-gray-900 mb-6'>
+        FAQ & Customer Support
+    </h2>
+
+    <div className='space-y-4'>
+
+        <details className='group border border-gray-200 rounded-xl p-4 cursor-pointer'>
+            <summary className='flex justify-between items-center font-semibold text-gray-800 list-none'>
+                Is this product returnable?
+                <span className='group-open:rotate-180 transition-transform'>⌄</span>
+            </summary>
+
+            <p className='mt-3 text-sm text-gray-600 leading-relaxed'>
+                Yes, this product can be returned within 7 days of delivery if it is unused and in original condition.
+            </p>
+        </details>
+
+        <details className='group border border-gray-200 rounded-xl p-4 cursor-pointer'>
+            <summary className='flex justify-between items-center font-semibold text-gray-800 list-none'>
+                How long does delivery take?
+                <span className='group-open:rotate-180 transition-transform'>⌄</span>
+            </summary>
+
+            <p className='mt-3 text-sm text-gray-600 leading-relaxed'>
+                Delivery usually takes 3–7 business days depending on your location.
+            </p>
+        </details>
+
+        
+        <details className='group border border-gray-200 rounded-xl p-4 cursor-pointer'>
+            <summary className='flex justify-between items-center font-semibold text-gray-800 list-none'>
+                Is Cash on Delivery available?
+                <span className='group-open:rotate-180 transition-transform'>⌄</span>
+            </summary>
+
+               <p className='mt-3 text-sm text-gray-600 leading-relaxed'>
+                 Yes, Cash on Delivery (COD) is available for selected locations.
+               </p>
+        </details>
+
+            <details className='group border border-gray-200 rounded-xl p-4 cursor-pointer'>
+              <summary className='flex justify-between items-center font-semibold text-gray-800 list-none'>
+                How can I contact customer support?
+                <span className='group-open:rotate-180 transition-transform'>⌄</span>
+              </summary>
+
+              <p className='mt-3 text-sm text-gray-600 leading-relaxed'>
+                You can contact our support team through email or phone for any product or order related queries.
+              </p>
+              </details>
+            </div>
+
+            <div className='mt-8 bg-blue-50 border border-blue-100 rounded-2xl p-5 flex flex-col md:flex-row md:items-center md:justify-between gap-4'>
+        
+                <div>
+                    <h3 className='text-lg font-semibold text-blue-900 mb-1'>
+                       Need more help?
+                    </h3>
+
+                    <p className='text-sm text-blue-700'>
+                      Our customer support team is available 24/7 to assist you.
+                    </p>
+               </div>
+
+                <div className='flex gap-3'>
+                    <button className='bg-blue-600 hover:bg-blue-700 text-white px-5 py-2.5 rounded-xl text-sm font-medium transition-all'>
+                        Contact Support
+                    </button>
+
+                    <button className='border border-blue-200 text-blue-700 hover:bg-blue-100 px-5 py-2.5 rounded-xl text-sm font-medium transition-all'>
+                        Live Chat
+                    </button>
+                  </div>
+                </div>
+              </div>
             </main>
             <Footer />
         </div>

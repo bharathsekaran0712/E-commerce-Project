@@ -4,11 +4,13 @@ import { useNavigate } from 'react-router-dom'
 import {Link} from 'react-router-dom'
 import {EyeIcon, EyeOffIcon, User} from 'lucide-react'
 import {KeyRound} from 'lucide-react'
+import toast, { Toaster } from 'react-hot-toast'
 
 
 const Register = () => {
     const [name,setName] = useState("")
-    const [email,setEmail] = useState("")
+    const [emailORphone,setEmailORPhone] = useState("")
+    const [role,setRole] = useState("")
     const [password,setPassword] = useState("")
     const [showPassword, setShowPassword] = useState("")
 
@@ -24,16 +26,18 @@ const Register = () => {
             },
             body:JSON.stringify({
               name,
-              email,
-              password
+              emailORphone,
+              password,
+              role
             })
         })
         const data = await res.json()
         
         if(data.success){
-          alert("User Registered successfully")
+          // localStorage.setItem("user", JSON.stringify(data))
+          toast.success("User Registered successfully")
 
-          navigate('/Login')
+          navigate('/')
         }else{
           alert(data.message)
         }
@@ -46,6 +50,7 @@ const Register = () => {
 
   return (
     <div className='min-h-screen flex items-center justify-center bg-gray-100' id='body'>
+      <Toaster position='top-center'/>
       <div className="bg-white p-8 rounded-2xl shadow-lg w-96">
         <h2 className="text-2xl font-bold text-center mb-6">Register</h2>
 
@@ -57,10 +62,22 @@ const Register = () => {
         onChange={(e)=>{setName(e.target.value)}}
          />
 
-        <input type="email" className='w-full border p-2 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-400'
-        placeholder='Email'
-        value={email}
-        onChange={(e)=>{setEmail(e.target.value)}}
+         {/* <input type="text" className='w-full border p-2 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-400'
+        placeholder='Role'
+        value={role}
+        onChange={(e)=>{setRole(e.target.value)}}
+        /> */}
+
+         <select onChange={(e)=>{setRole(e.target.value)}} name="role" defaultValue=""  className='w-full border p-2 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-400'>
+          <option value="" disabled>Select Role</option>
+          <option value="Admin">Admin</option>
+          <option value="User">User</option>
+         </select>
+
+        <input type="text" className='w-full border p-2 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-400'
+        placeholder='Email or Phone Number'
+        value={emailORphone}
+        onChange={(e)=>{setEmailORPhone(e.target.value)}}
          />
 
         <input type={showPassword ? "text" : "password"} className='w-full border p-2 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-400'
@@ -82,8 +99,8 @@ const Register = () => {
         <button onClick={registerUser} className='w-full bg-blue-500 text-white p-2 
         rounded-lg hover:bg-blue-600'>Register</button>
 
-        <p className='mb-3'>Alreary Registered?{" "}
-          <Link to={"/"} 
+        <p className='mb-3 flex justify-center items-center mt-6'>Alreary Registered?{" "}
+          <Link to="/" 
           className='text-blue-500 hover:underline'>
           Login</Link>
         </p>

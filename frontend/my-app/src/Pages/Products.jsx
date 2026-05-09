@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react'
-import { useParams } from 'react-router-dom'
+import { useNavigate, useParams } from 'react-router-dom'
 import PageTitle from '../Components/PageTitle'
 import Footer from '../Components/Footer'
 import Navbar from '../Components/Navbar'
@@ -8,6 +8,9 @@ import {Link} from 'react-router-dom'
 import { Toaster } from 'react-hot-toast'
 import toast from 'react-hot-toast'
 import { useCart } from '../features/context/CartContext'
+import Form from "../Components/Form"
+import { SendToBack, X } from 'lucide-react'
+
 
 
 
@@ -15,10 +18,69 @@ const Products = () => {
     const [products, setProducts] = useState([])
     const [category,setCategory] = useState("All")
     const [cartItems,setCartItems] = useState([])
+    const [showForm,setShowForm] = useState(false)
+    const [formData,setFormData] = useState({
+        name:"",
+        price:"",
+        category:"",
+        image:"",
+        numOfReviews:"",
+        stock:"",
+        description:""
+    })
+    const [editProduct,setEditProduct] = useState(null)
+    const [productId,setProductId] = useState("")
+    const [rating,setRating] = useState("")
     const { keyword } = useParams()
-
+    const user = JSON.parse(localStorage.getItem("user"))
     const { addToCart } = useCart()
+    const navigate = useNavigate()
 
+    const handleSubmit = async (e) => {
+    e.preventDefault()
+
+    try {
+        const url = editProduct
+            ? `http://localhost:8000/api/v1/product/${editProduct._id}`
+            : "http://localhost:8000/api/v1/product/addProduct"
+
+        const method = editProduct ? "PUT" : "POST"
+
+        const res = await fetch(url, {
+            method,
+            headers: {
+                "Content-Type": "application/json",
+                Authorization: `Bearer ${localStorage.getItem("token")}`
+            },
+            body: JSON.stringify(formData)
+        })
+
+        const data = await res.json()
+        console.log(data)
+
+        if (res.ok) {
+            toast.success(editProduct ? "Product updated" : "Product added")
+
+            setFormData({
+                name:"",
+                price:"",
+                category:"",
+                image:"",
+                numOfReviews:"",
+                description:""
+            })
+
+            setEditProduct(null)
+            setShowForm(false)
+            getAllProducts()
+        }else{
+            toast.error(data.message || "update failed")
+        }
+
+    } catch (error) {
+        toast.error("Error saving product")
+    }
+}
 
     useEffect(() => {
         if (keyword) {
@@ -49,11 +111,11 @@ const Products = () => {
         }
     }
 
-      const fetchCartFromBackend = async () => {
+    const fetchCartFromBackend = async () => {
     try {
         console.log(fetchCartFromBackend,"fetchCartFromBackend")
       const token = localStorage.getItem("token");
-console.log(token,"token")
+      console.log(token,"token")
       if (!token) return;
 
       const res = await fetch("http://localhost:8000/api/getCart", {
@@ -91,8 +153,55 @@ console.log(token,"token")
     }
 }
 
+
+const addReviews = async() => {
+    try {
+        const token = localStorage("token")
+
+        const res = await fetch("http://localhost:8000/api/v1/product/review",{
+            method:"POST",
+            headers:{
+                "content-type": "application/json",
+                Authorization: `Bearer ${token}`
+            },
+            body:JSON.stringify({
+                id:product._id,
+                name,
+                rating,
+                ratingAvg,
+                user:user
+            })
+        })
+
+        const data = await res.json()
+
+        if(res.ok){
+            toast.success("Product review added")
+            console.log("Product review added")
+        }
+    } catch (error) {
+        console.log(error.data)
+    }
+}
+  
     const categoryFiltered = category === "All" 
     ? products : products.filter((product)=> product.category === category)
+    console.log(categoryFiltered,"categoryFiltered")
+    const handleEdit = (product) => {
+        setEditProduct(product)
+
+        setFormData({
+            name: product.name,
+            price: product.price,
+            category: product.category,
+            image: product.image,
+            numOfReviews: product.numOfReviews,
+            stock: product.stock,
+            description: product.description
+        })
+
+        setShowForm(true)
+    }
 
 
     return (
@@ -114,8 +223,9 @@ console.log(token,"token")
                                 <ul className='space-y-2'>
                                     {["All","Accessories", "Fashion", "Mobile Phones", "Laptops"].map((cat) => (
                                         <li key={cat}>
-                                            <button onClick={()=>setCategory(cat)} className='text-gray-600
-                                             hover:text-blue-600 transition-colors font-semibold'>
+                                            <button onClick={()=>setCategory(cat)} className={`transition-colors font-semibold ${
+                                                category === cat ? "text-blue-600" : "text-gray-600 hover:text-blue-700" 
+                                            }`}>
                                                 {cat}</button>
                                         </li>
                                     ))}
@@ -124,11 +234,31 @@ console.log(token,"token")
                         </aside>
 
                         <section className='w-full md:w-3/4'>
-                            <div>
+                            <div className='flex items-center justify-between'>
                                 <h3 className='text-lg font-semibold text-gray-800 line-clamp-1 mb-2'>
                                     {keyword ? `Search Results for "${keyword}"` : "Our Products"}
                                 </h3>
+
+                                <div>
+                    
+                                {
+                                   user.role === "Admin" &&
+                                   <button onClick={() => {setShowForm(true) 
+                                    setEditProduct(null)}} className='border border-black bg-blue-600 text-white mb-2 rounded-lg px-3 py-2 cursor-pointer'>
+                                        Add Product</button>
+                                }
+                                </div>
                             </div>
+
+                            <Form
+                            showForm={showForm}
+                            setShowForm={setShowForm}
+                            formData={formData}
+                            setFormData={setFormData}
+                            handleSubmit={handleSubmit}
+                            editProduct={editProduct}
+                            setEditProduct={setEditProduct}
+                            />
 
                             
                             <div className='grid grid-cols-1 md:grid-cols-3 gap-4 '>
@@ -151,14 +281,25 @@ console.log(token,"token")
 
                                       <div className='px-4 pb-4 space-y-2'>
                                       <div className='flex items-center gap-2'>
-                                      <Rating/>
-                                      <span className='text-xs text-gray-500 font-semibold' >({product.numOfReviews} reviews)</span>
+                                      <Rating viewOnly={true} rating={product.ratings}/>
+                                      <span className='text-xs text-gray-500 font-semibold' >({product.numOfReviews} reviews) </span>
+                                      <span className='text-[11px] text-green-600'>{product.stock} Instocks</span>
                                       </div>
 
                                       <div className='flex items-center justify-between'>
                                       <span className='text-blue-600 font-bold text-lg'>₹ {product.price}</span>
-                                      <button className='bg-blue-600 text-white px-4 py-1.5 rounded-md text-sm 
-                                        hover:bg-blue-600 transition hover:scale-105' onClick={()=> addToCart({...product,quantity:1}).then((res)=>{fetchCartFromBackend();toast.success(`${product.name} is added to cart`)})}>Add to Cart</button>
+                                      {/* {
+                                        user.role === "Admin" && 
+                                        <button className='border border-black bg-red-500 rounded-lg px-5 py-1'>Edit</button>
+                                      } */}
+                                      {
+                                        user.role === "Admin" ?
+                                        (<button onClick={() => handleEdit(product)} className='border border-black bg-yellow-500 rounded-lg px-6 py-1' handleEdit = {handleEdit}>Edit</button>) 
+                                        : (<button className='bg-blue-600 text-white px-4 py-1.5 rounded-md text-sm 
+                                        hover:bg-blue-600 transition hover:scale-105' onClick={()=> addToCart({...product,quantity:1}).then((res)=>{fetchCartFromBackend();toast.success(`${product.name} is added to cart`)})}>Add to Cart</button>)
+                                      }
+                                      {/* <button className='bg-blue-600 text-white px-4 py-1.5 rounded-md text-sm 
+                                        hover:bg-blue-600 transition hover:scale-105' onClick={()=> addToCart({...product,quantity:1}).then((res)=>{fetchCartFromBackend();toast.success(`${product.name} is added to cart`)})}>Add to Cart</button> */}
                                       </div>
                                       </div>
                                       </div>

@@ -14,6 +14,9 @@ import Orders from "./Pages/Order";
 import OrderDetails from "./Pages/OrderDetails";
 import Profile from './Pages/Profile'
 import Payment from './Pages/Payment'
+import Form from './Components/Form'
+import Address from './Pages/Address'
+import AdminDashboard from './Components/adminDashboard'
 
 
 function App() {
@@ -35,7 +38,8 @@ function App() {
       <Route path="/payment" element={<Payment />} />
       <Route path="/order/:id" element={<OrderDetails />} />
       <Route path="/Profile" element={<Profile/>}/>
-      {/* <Route path="/ProfileInfo" element={<ProfileInfo/>}/> */}
+      <Route path="/Address" element={<Address/>}/>
+      <Route path="/AdminDashboard" element={<AdminDashboard/>}/>
     </Routes>
 
     </BrowserRouter>

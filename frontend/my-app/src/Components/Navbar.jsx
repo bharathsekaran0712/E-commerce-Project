@@ -1,5 +1,5 @@
 import {Link, useNavigate} from 'react-router-dom'
-import { X,Menu, Search, ShoppingBag, ShoppingCart,User } from 'lucide-react'
+import { X,Menu, Search, ShoppingBag, ShoppingCart,User, Home } from 'lucide-react'
 import React, { useEffect, useState } from 'react'
 import {useCart} from '../features/context/CartContext'
 import { useLocation } from 'react-router-dom'
@@ -8,7 +8,10 @@ const Navbar = (props) => {
   const [open,setOpen]= useState(false)
   const [search,setSearch] = useState("")
   const [cartItems,setCartItems]= useState([])
+  const [currentPage, setCurrentPage] = useState(localStorage.getItem("currentPage") || "Home")
+  console.log(currentPage,"currentPage")
   const navigate = useNavigate()
+
 
   console.log(props.cartItems,cartItems)
   // const { cartItems } = useCart()
@@ -60,7 +63,7 @@ const Navbar = (props) => {
   const location = useLocation()
 
   const token = localStorage.getItem("token")
-  const user = JSON.parse(localStorage.getItem("user"))
+  const user = JSON.parse(localStorage.getItem("user") || "{}")
 
 
   return (
@@ -71,17 +74,48 @@ const Navbar = (props) => {
             <div>
             <Link to="/Home" className='flex items-center gap-2 text-2xl font-bold text-blue-800'>
             <ShoppingBag/>
-            <span>Shopping hub</span>
+         
+          <span>Shopping hub</span>   
             </Link>
-        </div>
+            </div>
 
 
-        <div className='hidden md:flex items-center gap-8'>
-        <Link className='text-gray-700 hover:text-blue-600 transition font-semibold' to="/Home">Home</Link>
-        <Link className='text-gray-700 hover:text-blue-600 transition font-semibold' to="/Products">Products</Link>
-        <Link className='text-gray-700 hover:text-blue-600 transition font-semibold' to="/About-us">About Us</Link>
-        <Link className='text-gray-700 hover:text-blue-600 transition font-semibold' to="/Contact">Contact Us</Link>
-        </div>
+        {/* <div className='hidden md:flex items-center gap-8'>
+        <Link className='text-gray-700 hover:text-blue-600 transition font-semibold' to="/Home" onClick={() =>{ localStorage.setItem('currentPage',"Home")
+          setCurrentPage("Home")}}><span style={{color:currentPage === "Home" ? 'blue':'black'}}>Home</span></Link>
+        <Link className='text-gray-700 hover:text-blue-600 transition font-semibold' to="/Products" onClick={() => { localStorage.setItem('currentPage',"Products")
+          setCurrentPage('Products')}}><span style={{color:currentPage === "Products" ? 'blue':'black'}}>Products</span></Link>
+        <Link className='text-gray-700 hover:text-blue-600 transition font-semibold' to="/About-us" onClick={() => {localStorage.setItem('currentPage',"About-us")
+          setCurrentPage("About-us")}}><span style={{color:currentPage === "About-us" ? 'blue':'black'}}>About-us</span></Link>
+        <Link className='text-gray-700 hover:text-blue-600 transition font-semibold' to="/Contact" onClick={() => {localStorage.setItem('currentPage',"Contact")
+          setCurrentPage("Contact")}}><span style={{color:currentPage === "Contact" ? 'blue':'black'}}>Contact-Us</span></Link>
+        </div> */}
+
+      <div className='hidden md:flex items-center gap-8'>
+        <Link to="/Home">
+        <span style={{ color: location.pathname === "/Home" ? "blue" : "black" }}>
+         Home
+        </span>
+        </Link>
+
+        <Link to="/Products">
+        <span style={{ color: location.pathname === "/Products" ? "blue" : "black" }}>
+         Products
+        </span>
+        </Link>
+
+        <Link to="/About-us">
+        <span style={{ color: location.pathname === "/About-us" ? "blue" : "black" }}>
+         About-us
+        </span>
+        </Link>
+
+        <Link to="/Contact">
+        <span style={{ color: location.pathname === "/Contact" ? "blue" : "black" }}>
+         Contact-Us
+        </span>
+        </Link>
+      </div>
         
 
         <div className='flex items-center gap-6'>
@@ -110,7 +144,7 @@ const Navbar = (props) => {
              
              {token ? (
                  <Link to="/profile" 
-                   className="flex items-center gap-2 bg-blue-700 px-3 py-2 rounded-lg 
+                   className="flex items-center gap-2 bg-gradient-to-r from-blue-500 to-indigo-600 px-3 py-2 rounded-lg 
                    text-white hover:bg-blue-700 transition"
                  >
                  <User size={18} />

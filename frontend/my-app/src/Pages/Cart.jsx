@@ -31,7 +31,7 @@ useEffect(() => {
 
 
 useEffect(() => {
-  console.log("first")
+  // console.log("first")
   setCartItems([])
   fetchCartFromBackend();
 }, []);
@@ -92,7 +92,11 @@ const fetchCartFromBackend = async () => {
   }
 
 const checkoutHandler = () => {
-  navigate("/payment")
+  if(finalTotal === 0){
+    toast.error("Please add product")
+  }else{
+    navigate("/payment")
+  }
 }
 
 

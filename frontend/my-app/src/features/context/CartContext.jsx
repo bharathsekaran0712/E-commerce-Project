@@ -21,7 +21,7 @@ export const CartProvider = ({ children }) => {
 
           const token = localStorage.getItem("token");
           const user=JSON.parse(localStorage.getItem("user"))
-                    if (!token) return; 
+          if (!token) return; 
     
           await fetch("http://localhost:8000/api/addToCart", {
             method: "POST",
@@ -41,15 +41,6 @@ export const CartProvider = ({ children }) => {
         } catch (error) {
           console.log("Cart save error:", error);
         }
-    // const exist = cartItems.find(item => item._id === product._id)
-
-    // if (exist) {
-    //   setCartItems(cartItems.map(item =>
-    //     item._id === product._id ? { ...item, quantity: item.quantity + 1 } : item
-    //   ))
-    // } else {
-    //   setCartItems([...cartItems, { ...product, quantity: 1 }])
-    // }
   };
 
   

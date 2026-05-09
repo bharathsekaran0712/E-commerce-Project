@@ -3,10 +3,11 @@ import React, { useEffect, useState } from 'react'
 import headphone from '../assets/headphone.jpg'
 import shirt from '../assets/T-shirt.jpg'
 import shoe from '../assets/shoe.jpg'
+import Samsung from '../assets/Samsung.jpg'
 
    const images = [
         headphone,
-        shirt,
+        Samsung,
         shoe
     ]
 
@@ -34,8 +35,8 @@ const ImageSlider = () => {
             `translateX(-${current * 100}%)`
         }}>
             {images.map((image,index)=>(
-                <img src={image} key={index} className='h-75 w-full md:h-117.5 object-cover shrink-0'/>
-            ))}
+                <img src={image} key={index} className='h-75 w-full md:h-120 object-cover shrink-0'/>
+             ))}
         </div>
         
         <button onClick={prevSlide} className='absolute left-4 top-1/2 bg-black/40 hover:bg-black/60 text-white p-2 rounded-full transition'>
