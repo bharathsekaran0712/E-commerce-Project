@@ -48,19 +48,22 @@ const orderSchema = new mongoose.Schema({
             type:mongoose.Schema.ObjectId,
             ref:"Product",
             required:true
+        },
+        rating:{
+            type: Number,
+            default:0
         }
     }],
     orderStatus:{
         type:String,
         required:true,
-        enum: ["Processing", "Shipped", "Order Placed", "Cancelled"],
+        enum: ["Processing", "Shipped", "Order Placed","Out for Delivery", "Delivered","Cancelled"],
         default:"Order Placed"
     },
     user:{
         type:mongoose.Schema.ObjectId,
         ref:"User",
         required:true,
-        unique:true
     },
     totalPrice: {
           type: Number,

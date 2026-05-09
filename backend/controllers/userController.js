@@ -1,24 +1,28 @@
 const User = require('../models/userModel')
 const bcrypt = require("bcryptjs")
 const jwt = require("jsonwebtoken")
+const mongoose = require("mongoose")
 
 exports.registerUser = async(req,res)=>{
     try {
-        const {name,email,password}=req.body
+        const {name,emailORphone,password,role}=req.body
 
-        const userExists = await User.findOne({email:email})
+        const userExists = await User.findOne({email:emailORphone})
 
         if(userExists){
             return res.status(400).json({
                 success:false,
-                message:"User already exists"
+                message:"User already exists"   
             })
         }
+
         const hashPassword = await bcrypt.hash(password,10)
+
         const newUser = await User.create({
             name,
-            email,
-            password:hashPassword
+            emailORphone,
+            password:hashPassword,
+            role
         })
         res.status(201).json({
             success:true,
@@ -35,13 +39,13 @@ exports.registerUser = async(req,res)=>{
 //Login user
 exports.loginUser = async(req,res)=>{
     try {
-        const {email,password} = req.body
-        const user = await User.findOne({email})
+        const {emailORphone,password,role} = req.body
+        const user = await User.findOne({emailORphone})
 
         if(!user){
             return res.status(400).json({
                 success:false,
-                message:"Invalid email"
+                message:"Invalid email or Phone number"
             })
         }
         const isPasswordMatch = await bcrypt.compare(password, user.password)
@@ -52,6 +56,7 @@ exports.loginUser = async(req,res)=>{
                 message:"Invalid password"
             })
         }
+        
         const token = jwt.sign(
             {userId:user._id},
             process.env.JWT_SECRET_KEY,
@@ -63,7 +68,8 @@ exports.loginUser = async(req,res)=>{
             user:{
                 _id: user._id,
                 name: user.name,
-                email: user.email
+                emailORphone: user.emailORphone,
+                role:user.role
             }
         })
     } catch (error) {
@@ -73,7 +79,39 @@ exports.loginUser = async(req,res)=>{
     }
 }
 
-// middleware for protected routes
+
+exports.editUser = async (req, res) => {
+  try {
+    const {userId,name,emailORphone }= req.body;
+   let _id = new mongoose.Types.ObjectId(userId)
+    const updatedUser = await User.findOneAndUpdate(
+      _id,
+      {
+        name: name,
+        emailORphone:emailORphone,
+      },
+      { new: true }
+    );
+
+    if(!updatedUser){
+        return res.status(404).json({
+            success:false,
+            message:"User not found"
+        })
+    }
+
+    res.status(200).json({
+      success: true,
+      user: updatedUser,
+    });
+  } catch (error) {
+    res.status(500).json({
+      success: false,
+      message: error.message,
+    });
+  }
+};
+
 
 
 

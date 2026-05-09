@@ -16,13 +16,12 @@ exports.searchProducts = async(req,res)=>{
                 $options:"i"
             }
         },
-            {
-                category:{
-                    $regex:req.query.keyword,
-                    $options:"i"
-                }
+        {
+            category:{
+                $regex:req.query.keyword,
+                $options:"i"
             }
-
+        }   
         ]}:{}
 
         const products = await Product.find(keyword)

@@ -8,16 +8,26 @@ const userSchema = new mongoose.Schema({
         trim:true
   
     },
-    email:{
+    emailORphone:{
         type:String,
-      
-        unique:true,
+        unique:true
 
     },
     password:{
         type:String,
         
+    } ,
+    role:{
+        type:String,
+        trim:true
+  
+    },
+    addresses:[
+        {
+            address:{
+        type:String
     }
+}],
 },{timestamps:true})
 
 module.exports = mongoose.model("User",userSchema)

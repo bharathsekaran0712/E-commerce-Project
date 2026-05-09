@@ -29,17 +29,18 @@ const productSchema = new mongoose.Schema({
     },
     stock:{
         type:Number,
-        required:[true,"Please enter product stocks"],
-        default:1
+        default:0
     },
     numOfReviews:{
         type:Number,
         default:0
     },
     reviews:[{
-        name:{type:String,required:true},
-        rating:{type:Number,required:true},
-        comment:{type:String,required:true}
+        name:{type:String},
+        user:{
+            type:mongoose.Schema.ObjectId,
+            ref: "User",
+        }
     }],
     createdAt:{
         type:Date,

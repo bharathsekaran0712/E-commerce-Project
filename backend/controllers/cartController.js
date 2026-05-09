@@ -1,4 +1,3 @@
-
 const Cart = require("../models/cartSchema");
 
 exports.getCart = async (req, res) => {
@@ -11,7 +10,7 @@ exports.getCart = async (req, res) => {
 
 exports.saveCart = async (req, res) => {
   const {items, userId} = req.body
-  console.log(items,"items")
+  // console.log(items,"items")
 const savedata={ 
       productId: items._id,
       image:items.image,
@@ -19,24 +18,24 @@ const savedata={
       price: items.price,
       quantity: items.quantity
     }
-    console.log(savedata,"savedata")
+    // console.log(savedata,"savedata")
   let cart = await Cart.findOne({ userId: userId })
 
   if (cart) {
 
    let existingitem = cart.items.find(val=> val.productId.toString() === items._id)
-if(existingitem){
-  existingitem.quantity += items.quantity
-}else{
-  cart.items.push(savedata)
-}
-  } else {
-    cart = new Cart({ userId: userId, items:[savedata] })
-  }
-console.log(cart)
-  await cart.save()
-  res.json(cart)
-}
+   if(existingitem){
+      existingitem.quantity += items.quantity
+   }else{
+      cart.items.push(savedata)
+   }
+   } else {
+      cart = new Cart({ userId: userId, items:[savedata] })
+   }
+  console.log(cart)
+    await cart.save()
+    res.json(cart)
+   }
 
 exports.removeCart = async(req,res) => {
   try {
@@ -44,7 +43,7 @@ exports.removeCart = async(req,res) => {
   const cart = await Cart.findOne({userId: userId})
 
   if(!cart){
-    res.status(404).json({
+    return res.status(404).json({
       status:false,
       message:"Item not found"
     })

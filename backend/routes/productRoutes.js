@@ -7,7 +7,11 @@ router.get("/products/getAllProducts",productController.getAllProducts)
 
 router.get("/product/:id",productController.getSingleProduct)
 
-router.post("/product",productController.addProducts)
+router.post("/product/addProduct",productController.addProducts)
+
+router.post("/product/review",productController.addReview)
+
+router.post("/product/subReview",productController.submitReview)
 
 router.get("/products/search",searchController.searchProducts)
 
