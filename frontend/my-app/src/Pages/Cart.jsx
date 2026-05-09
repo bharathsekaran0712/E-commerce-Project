@@ -23,6 +23,8 @@ const Cart = () => {
 
   const navigate = useNavigate();
 
+  const url = "https://e-commerce-backend-zg40.onrender.com"
+
 
 
 useEffect(() => {
@@ -42,7 +44,7 @@ const fetchCartFromBackend = async () => {
       console.log(token,"token")
       if (!token) return;
 
-      const res = await fetch("http://localhost:8000/api/getCart", {
+      const res = await fetch(`${url}+"/api/getCart"`, {
         method: "POST",
             headers: {
               "Content-Type": "application/json",
@@ -68,7 +70,7 @@ const fetchCartFromBackend = async () => {
       if (!token) return;
 
       const user=JSON.parse(localStorage.getItem("user"))
-      const res = await fetch("http://localhost:8000/api/removeCart",
+      const res = await fetch(`${url}+"/api/removeCart"`,
         {
           method:"POST",
           headers: {

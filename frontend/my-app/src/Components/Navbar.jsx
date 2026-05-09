@@ -12,6 +12,8 @@ const Navbar = (props) => {
   console.log(currentPage,"currentPage")
   const navigate = useNavigate()
 
+  const url = "https://e-commerce-backend-zg40.onrender.com"
+
 
   console.log(props.cartItems,cartItems)
   // const { cartItems } = useCart()
@@ -30,7 +32,7 @@ const Navbar = (props) => {
       console.log(token,"token")
       if (!token) return;
 
-      const res = await fetch("http://localhost:8000/api/getCart", {
+      const res = await fetch(`${url}+"/api/getCart"`, {
         method: "POST",
             headers: {
               "Content-Type": "application/json",

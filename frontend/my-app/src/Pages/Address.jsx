@@ -41,21 +41,23 @@ const Address = () => {
     })
   }
 
+  const url = "https://e-commerce-backend-zg40.onrender.com"
+
   const handleSubmit = async (e) => {
 
     e.preventDefault()
 
     try {
 
-      const url = editId
-        ? "http://localhost:8000/api/address/edit"
-        : "http://localhost:8000/api/address/add"
+      const Url = editId
+        ? `${url}+"/api/address/edit"`
+        : `${url}+"/api/address/add"`
 
       let payload = editId
         ? { ...form, addressId: editId }
         : form
 
-      const res = await fetch(url, {
+      const res = await fetch(Url, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -101,7 +103,7 @@ const Address = () => {
     try {
 
       const res = await fetch(
-        "http://localhost:8000/api/address/get",
+        `${url}+"/api/address/get"`,
         {
           method: "POST",
           headers: {
@@ -130,7 +132,7 @@ const Address = () => {
     try {
 
       const res = await fetch(
-        "http://localhost:8000/api/address/default",
+        `${url}+"/api/address/default"`,
         {
           method: "POST",
           headers: {
@@ -161,7 +163,7 @@ const Address = () => {
     try {
 
       const res = await fetch(
-        "http://localhost:8000/api/address/delete",
+        `${url}+"/api/address/delete"`,
         {
           method: "POST",
           headers: {

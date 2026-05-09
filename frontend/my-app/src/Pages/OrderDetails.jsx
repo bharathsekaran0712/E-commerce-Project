@@ -16,13 +16,15 @@ const OrderDetails = () => {
   const { id } = useParams();
   const [order, setOrder] = useState(null);
 
+  const url = "https://e-commerce-backend-zg40.onrender.com"
+
   useEffect(() => {
     fetchOrder();
   }, []);
 
   const fetchOrder = async () => {
     const token = localStorage.getItem("token");
-    const res = await fetch(`http://localhost:8000/api/v1/order/${id}`, {
+    const res = await fetch(`${url}+/api/v1/order/${id}`, {
       headers: { Authorization: `Bearer ${token}` },
     });
     const data = await res.json();

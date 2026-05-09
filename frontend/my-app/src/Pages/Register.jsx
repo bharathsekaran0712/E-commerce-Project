@@ -16,10 +16,12 @@ const Register = () => {
 
     const navigate = useNavigate()
 
+    const url = "https://e-commerce-backend-zg40.onrender.com"
+
 
      const registerUser = async()=>{
       try {
-        const res = await fetch("http://localhost:8000/api/v1/register",{
+        const res = await fetch(`${url}+"/api/v1/register"`,{
             method:"POST",
             headers:{
                 "content-type":"application/json"

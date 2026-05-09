@@ -16,6 +16,8 @@ const Login = () => {
 
     const navigate = useNavigate()
 
+    const url = "https://e-commerce-backend-zg40.onrender.com"
+
     const loginUser = async () => {
         if (!emailORphone || !password) {
             toast.error("Please enter email or password")
@@ -25,7 +27,7 @@ const Login = () => {
         try {
             setLoading(true)
 
-            const res = await fetch("http://localhost:8000/api/v1/login", {
+            const res = await fetch(`${url}/api/v1/login`, {
                 method: "POST",
                 headers: {
                     "content-type": "application/json"

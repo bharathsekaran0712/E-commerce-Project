@@ -30,6 +30,8 @@ const Profile = () => {
 
   const token = localStorage.getItem("token")
 
+  const url = "https://e-commerce-backend-zg40.onrender.com"
+
   const handleChange = (e) => {
     setForm({
       ...form,
@@ -41,7 +43,7 @@ const Profile = () => {
     e.preventDefault()
 
     try {
-      const res = await fetch("http://localhost:8000/api/v1/user/edit", {
+      const res = await fetch(`${url}+"/api/v1/user/edit"`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",

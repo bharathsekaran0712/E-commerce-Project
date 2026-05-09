@@ -21,6 +21,8 @@ const Orders = () => {
   const user = JSON.parse(localStorage.getItem("user"))
   const token = localStorage.getItem("token")
 
+  const url = "https://e-commerce-backend-zg40.onrender.com"
+
   useEffect(() => {
     fetchOrders()
   }, [])
@@ -37,7 +39,7 @@ const Orders = () => {
       setLoading(true)
 
       const res = await fetch(
-        "http://localhost:8000/api/v1/orders/user",
+        `${url}+"/api/v1/orders/user"`,
         {
           method: "POST",
           headers: {
@@ -68,7 +70,7 @@ const Orders = () => {
     try {
 
       const res = await fetch(
-        "http://localhost:8000/api/v1/order/status",
+        `${url}+"/api/v1/order/status"`,
         {
           method: "POST",
           headers: {
@@ -100,7 +102,7 @@ const Orders = () => {
     try {
 
       const res = await fetch(
-        "http://localhost:8000/api/v1/product/review",
+        `${url}+"/api/v1/product/review"`,
         {
           method: "POST",
           headers: {
@@ -132,7 +134,7 @@ const Orders = () => {
     try {
 
       const res = await fetch(
-        "http://localhost:8000/api/v1/order/cancel",
+        `${url}+"/api/v1/order/cancel"`,
         {
           method: "POST",
           headers: {

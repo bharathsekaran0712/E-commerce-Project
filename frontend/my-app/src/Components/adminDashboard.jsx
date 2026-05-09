@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react"
 
 // ─── API Config ───────────────────────────────────────────────────────────────
-const BASE = "http://localhost:8000"
+const BASE = "https://e-commerce-backend-zg40.onrender.com"
 const token = () => localStorage.getItem("token")
 const authHeader = () => ({ "Content-Type": "application/json", Authorization: `Bearer ${token()}` })
 

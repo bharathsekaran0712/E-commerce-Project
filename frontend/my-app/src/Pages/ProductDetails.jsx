@@ -20,6 +20,8 @@ const ProductDetails = () => {
 
     const { addToCart } = useCart()
 
+    const url = "https://e-commerce-backend-zg40.onrender.com"
+
 
     useEffect(() => {
         getSingleProduct()
@@ -27,7 +29,7 @@ const ProductDetails = () => {
 
     const getSingleProduct = async () => {
         try {
-            const response = await fetch(`http://localhost:8000/api/v1/product/${id}`)
+            const response = await fetch(`${url}+/api/v1/product/${id}`)
             if (!response.ok) {
                 console.log("Failed to fetch posts");
             }

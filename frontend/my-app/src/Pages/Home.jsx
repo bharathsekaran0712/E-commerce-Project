@@ -33,6 +33,8 @@ const Home = () => {
 
   const { addToCart } = useCart()
 
+  const url = "https://e-commerce-backend-zg40.onrender.com"
+
   useEffect(()=>{
     fetchCartFromBackend()
     getAllProducts()
@@ -41,7 +43,7 @@ const Home = () => {
   const getAllProducts = async () => {
     try {
 
-      const response = await fetch("http://localhost:8000/api/v1/products/getAllProducts")
+      const response = await fetch(`${url}+"/api/v1/products/getAllProducts"`)
 
       const data = await response.json()
 
@@ -61,7 +63,7 @@ const Home = () => {
         console.log(token,"token")
         if (!token) return;
 
-      const res = await fetch("http://localhost:8000/api/getCart", {
+      const res = await fetch(`${url}+"/api/getCart"`, {
         method: "POST",
             headers: {
               "Content-Type": "application/json",
@@ -84,7 +86,7 @@ const Home = () => {
     e.preventDefault()
 
     try {
-        const url = `http://localhost:8000/api/v1/product/${editProduct._id}`
+        const url = `${url}+/api/v1/product/${editProduct._id}`
 
         const res = await fetch(url, {
             method:"PUT",
