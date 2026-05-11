@@ -32,7 +32,7 @@ const Navbar = (props) => {
       console.log(token,"token")
       if (!token) return;
 
-      const res = await fetch(`${url}+"/api/getCart"`, {
+      const res = await fetch(`${url}/api/getCart`, {
         method: "POST",
             headers: {
               "Content-Type": "application/json",

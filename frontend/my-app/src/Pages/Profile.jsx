@@ -43,7 +43,7 @@ const Profile = () => {
     e.preventDefault()
 
     try {
-      const res = await fetch(`${url}+"/api/v1/user/edit"`, {
+      const res = await fetch(`${url}/api/v1/user/edit`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",

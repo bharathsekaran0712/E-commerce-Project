@@ -29,7 +29,7 @@ const ProductDetails = () => {
 
     const getSingleProduct = async () => {
         try {
-            const response = await fetch(`${url}+/api/v1/product/${id}`)
+            const response = await fetch(`${url}/api/v1/product/${id}`)
             if (!response.ok) {
                 console.log("Failed to fetch posts");
             }

@@ -39,7 +39,7 @@ const Orders = () => {
       setLoading(true)
 
       const res = await fetch(
-        `${url}+"/api/v1/orders/user"`,
+        `${url}/api/v1/orders/user`,
         {
           method: "POST",
           headers: {
@@ -70,7 +70,7 @@ const Orders = () => {
     try {
 
       const res = await fetch(
-        `${url}+"/api/v1/order/status"`,
+        `${url}/api/v1/order/status`,
         {
           method: "POST",
           headers: {
@@ -102,7 +102,7 @@ const Orders = () => {
     try {
 
       const res = await fetch(
-        `${url}+"/api/v1/product/review"`,
+        `${url}/api/v1/product/review`,
         {
           method: "POST",
           headers: {
@@ -134,7 +134,7 @@ const Orders = () => {
     try {
 
       const res = await fetch(
-        `${url}+"/api/v1/order/cancel"`,
+        `${url}/api/v1/order/cancel`,
         {
           method: "POST",
           headers: {

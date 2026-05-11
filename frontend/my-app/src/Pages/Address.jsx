@@ -50,8 +50,8 @@ const Address = () => {
     try {
 
       const Url = editId
-        ? `${url}+"/api/address/edit"`
-        : `${url}+"/api/address/add"`
+        ? `${url}/api/address/edit`
+        : `${url}/api/address/add`
 
       let payload = editId
         ? { ...form, addressId: editId }
@@ -103,7 +103,7 @@ const Address = () => {
     try {
 
       const res = await fetch(
-        `${url}+"/api/address/get"`,
+        `${url}/api/address/get`,
         {
           method: "POST",
           headers: {
@@ -132,7 +132,7 @@ const Address = () => {
     try {
 
       const res = await fetch(
-        `${url}+"/api/address/default"`,
+        `${url}/api/address/default`,
         {
           method: "POST",
           headers: {
@@ -163,7 +163,7 @@ const Address = () => {
     try {
 
       const res = await fetch(
-        `${url}+"/api/address/delete"`,
+        `${url}/api/address/delete`,
         {
           method: "POST",
           headers: {

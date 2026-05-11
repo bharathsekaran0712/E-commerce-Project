@@ -24,7 +24,7 @@ const OrderDetails = () => {
 
   const fetchOrder = async () => {
     const token = localStorage.getItem("token");
-    const res = await fetch(`${url}+/api/v1/order/${id}`, {
+    const res = await fetch(`${url}/api/v1/order/${id}`, {
       headers: { Authorization: `Bearer ${token}` },
     });
     const data = await res.json();

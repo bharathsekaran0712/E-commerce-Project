@@ -16,7 +16,8 @@ const Login = () => {
 
     const navigate = useNavigate()
 
-    const url = "https://e-commerce-backend-zg40.onrender.com"
+    // const url = "https://e-commerce-backend-zg40.onrender.com"
+    const url = "http://localhost:8000"
 
     const loginUser = async () => {
         if (!emailORphone || !password) {

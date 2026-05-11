@@ -21,7 +21,7 @@ const Register = () => {
 
      const registerUser = async()=>{
       try {
-        const res = await fetch(`${url}+"/api/v1/register"`,{
+        const res = await fetch(`${url}/api/v1/register`,{
             method:"POST",
             headers:{
                 "content-type":"application/json"

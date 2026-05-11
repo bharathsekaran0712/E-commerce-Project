@@ -48,12 +48,10 @@ const Payment = () => {
   const processingFee = Math.round(itemsTotal * 0.02);
   const totalAmount = itemsTotal + processingFee;
 
-  // Backend URL
+
   const url = "https://e-commerce-backend-zg40.onrender.com";
 
-  // ─────────────────────────────────────────────────────────────
-  // LOAD RAZORPAY SCRIPT
-  // ─────────────────────────────────────────────────────────────
+
   const loadRazorpayScript = () => {
     return new Promise((resolve) => {
       const script = document.createElement("script");
@@ -71,9 +69,7 @@ const Payment = () => {
     });
   };
 
-  // ─────────────────────────────────────────────────────────────
-  // FETCH ADDRESSES
-  // ─────────────────────────────────────────────────────────────
+
   const fetchAddresses = async () => {
     try {
       const res = await fetch(`${url}/api/address/get`, {
@@ -107,9 +103,7 @@ const Payment = () => {
     fetchAddresses();
   }, []);
 
-  // ─────────────────────────────────────────────────────────────
-  // ADD ADDRESS
-  // ─────────────────────────────────────────────────────────────
+
   const handleAddAddress = async (e) => {
     e.preventDefault();
 
@@ -156,9 +150,7 @@ const Payment = () => {
     }
   };
 
-  // ─────────────────────────────────────────────────────────────
-  // SHIPPING ADDRESS
-  // ─────────────────────────────────────────────────────────────
+
   const buildShippingAddress = () => {
     const addr = addresses.find((a) => a._id === selectedId);
 
@@ -178,9 +170,6 @@ const Payment = () => {
 
   const selectedAddr = addresses.find((a) => a._id === selectedId);
 
-  // ─────────────────────────────────────────────────────────────
-  // SAVE ORDER IN DATABASE
-  // ─────────────────────────────────────────────────────────────
   const saveOrder = async (paymentId = "", paymentStatus = "Pending") => {
     const shippingAddress = buildShippingAddress();
 
@@ -216,9 +205,7 @@ const Payment = () => {
     return await res.json();
   };
 
-  // ─────────────────────────────────────────────────────────────
-  // RAZORPAY PAYMENT
-  // ─────────────────────────────────────────────────────────────
+
   const handleRazorpayPayment = async () => {
     const shippingAddress = buildShippingAddress();
 
@@ -237,7 +224,7 @@ const Payment = () => {
         return;
       }
 
-      // CREATE ORDER FROM BACKEND
+      
       const orderRes = await fetch(`${url}/api/v1/payment/create-order`, {
         method: "POST",
         headers: {
@@ -272,7 +259,7 @@ const Payment = () => {
 
         handler: async function (response) {
           try {
-            // VERIFY PAYMENT
+            
             const verifyRes = await fetch(
               `${url}/api/v1/payment/verify`,
               {
@@ -298,7 +285,7 @@ const Payment = () => {
             const verifyData = await verifyRes.json();
 
             if (verifyData.success) {
-              // SAVE ORDER
+              
               const data = await saveOrder(
                 response.razorpay_payment_id,
                 "Paid"
@@ -350,9 +337,7 @@ const Payment = () => {
     }
   };
 
-  // ─────────────────────────────────────────────────────────────
-  // COD ORDER
-  // ─────────────────────────────────────────────────────────────
+  
   const handleCODOrder = async () => {
     const shippingAddress = buildShippingAddress();
 
@@ -386,9 +371,7 @@ const Payment = () => {
     }
   };
 
-  // ─────────────────────────────────────────────────────────────
-  // PAY BUTTON
-  // ─────────────────────────────────────────────────────────────
+  
   const handlePayment = async () => {
     if (paymentMethod === "COD") {
       handleCODOrder();

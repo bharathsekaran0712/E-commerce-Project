@@ -43,8 +43,8 @@ const Products = () => {
 
     try {
         const Url = editProduct
-            ? `${url}+/api/v1/product/${editProduct._id}`
-            : `${url}+"/api/v1/product/addProduct"`
+            ? `${url}/api/v1/product/${editProduct._id}`
+            : `${url}/api/v1/product/addProduct`
 
         const method = editProduct ? "PUT" : "POST"
 
@@ -94,7 +94,7 @@ const Products = () => {
 
     const getAllProducts = async () => {
         try {
-            const response = await fetch(`${url}"/api/v1/products/getAllProducts"`)
+            const response = await fetch(`${url}/api/v1/products/getAllProducts`)
             if (!response.ok) {
                 console.log("Failed to fetch posts");
             }
@@ -120,7 +120,7 @@ const Products = () => {
       console.log(token,"token")
       if (!token) return;
 
-      const res = await fetch(`${url}+"/api/getCart"`, {
+      const res = await fetch(`${url}/api/getCart`, {
         method: "POST",
             headers: {
               "Content-Type": "application/json",
@@ -143,7 +143,7 @@ const Products = () => {
     try {
 
         const response = await fetch(
-            `${url}+/api/v1/products/search?keyword=${keyword}`
+            `${url}/api/v1/products/search?keyword=${keyword}`
         )
 
         const data = await response.json()
@@ -160,7 +160,7 @@ const addReviews = async() => {
     try {
         const token = localStorage("token")
 
-        const res = await fetch(`${url}+"/api/v1/product/review"`,{
+        const res = await fetch(`${url}/api/v1/product/review`,{
             method:"POST",
             headers:{
                 "content-type": "application/json",

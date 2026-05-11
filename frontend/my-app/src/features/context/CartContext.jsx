@@ -7,6 +7,9 @@ export const CartProvider = ({ children }) => {
 
   const [cartItems, setCartItems] = useState([]);
 
+  const url = "https://e-commerce-backend-zg40.onrender.com"
+  
+
 
   useEffect(() => {
     // localStorage.setItem("cart", JSON.stringify(cartItems));
@@ -23,7 +26,7 @@ export const CartProvider = ({ children }) => {
           const user=JSON.parse(localStorage.getItem("user"))
           if (!token) return; 
     
-          await fetch("http://localhost:8000/api/addToCart", {
+          await fetch(`${url}/api/addToCart`, {
             method: "POST",
             headers: {
               "Content-Type": "application/json",
