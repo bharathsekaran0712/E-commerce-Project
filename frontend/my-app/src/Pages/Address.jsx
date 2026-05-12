@@ -12,6 +12,7 @@ import {
   BadgeCheck,
   X
 } from "lucide-react"
+import Navbar from "../Components/Navbar"
 
 const Address = () => {
 
@@ -195,6 +196,7 @@ const Address = () => {
   return (
     <>
       <Toaster position="top-center" />
+      <Navbar/>
 
       <div className="min-h-screen bg-gradient-to-br from-slate-100 via-blue-50 to-indigo-100 p-4 md:p-8">
        <Back />

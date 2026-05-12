@@ -246,7 +246,7 @@ const Payment = () => {
 
       const options = {
         key: import.meta.env.VITE_RAZORPAY_KEY_ID,
-        
+
 
         amount: orderData.order.amount,
 
@@ -392,7 +392,7 @@ const Payment = () => {
 
           {/* HEADER */}
           <div className="bg-gradient-to-r from-blue-700 to-indigo-700 px-6 py-5 text-white">
-            <Back />
+            <Back className="text-black"/>
 
             <h1 className="text-2xl font-bold mt-4">
               Secure Checkout

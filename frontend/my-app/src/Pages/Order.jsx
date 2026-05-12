@@ -5,6 +5,7 @@ import toast, { Toaster } from "react-hot-toast"
 import Back from "../Components/Back"
 import Rating from "../Components/Rating"
 import {ArrowRight,Package,Truck,CircleCheck,Clock3,XCircle,ShoppingBag,Star} from "lucide-react"
+import Navbar from "../Components/Navbar"
 
 const Orders = () => {
 
@@ -226,6 +227,7 @@ const Orders = () => {
     <>
       <PageTitle title={"Orders | E-commerce"} />
       <Toaster position="top-center" />
+      <Navbar/>
 
       <div className="min-h-screen bg-gradient-to-br from-slate-100 via-blue-50 to-indigo-100 p-4 md:p-8">
          <div className="flex items-center justify-between mb-2">

@@ -9,7 +9,7 @@ const Back = () => {
     <div>
         <button
            onClick={() => navigate(-1)}
-           className="flex items-center gap-2 bg-white shadow-md px-5 py-3 mb-2 rounded-xl hover:scale-105 transition cursor-pointer"
+           className="flex items-center gap-2 bg-white text-black shadow-md px-5 py-3 mb-2 rounded-xl hover:scale-105 transition cursor-pointer"
         >
         <ArrowLeft size={20} />
         Back

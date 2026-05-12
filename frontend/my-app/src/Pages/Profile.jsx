@@ -42,6 +42,17 @@ const Profile = () => {
   const handleUpdate = async (e) => {
     e.preventDefault()
 
+    const value = form.emailORphone.trim()
+
+    const emailRegex = /^[A-Za-z][A-Za-z0-9._%+-]*@[A-Za-z0-9.-]+\.[A-Za-z]{2,}$/
+
+    const phoneRegex = /^[0-9]{10}$/
+
+    if (!emailRegex.test(value) && !phoneRegex.test(value)) {
+       toast.error("Enter valid email or 10-digit phone number")
+      return
+    }
+
     try {
       const res = await fetch(`${url}/api/v1/user/edit`, {
         method: "POST",
@@ -199,7 +210,7 @@ const Profile = () => {
                 </p>
               </div>
 
-              <div className="bg-slate-50 border border-slate-200 rounded-2xl p-5 hover:shadow-md transition">
+              {/* <div className="bg-slate-50 border border-slate-200 rounded-2xl p-5 hover:shadow-md transition">
                 <div className="flex items-center gap-3 mb-3 text-purple-600">
                   <Shield />
                   <h3 className="font-semibold">Role</h3>
@@ -208,7 +219,7 @@ const Profile = () => {
                 <p className="text-slate-700 font-medium">
                   {user?.role || "Not Provided"}
                 </p>
-              </div>
+              </div> */}
 
               <div className="bg-slate-50 border border-slate-200 rounded-2xl p-5 hover:shadow-md transition">
                 <div className="flex items-center gap-3 mb-3 text-cyan-600">
