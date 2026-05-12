@@ -116,7 +116,8 @@ const Sidebar = ({ active, setActive, user, onLogout }) => {
       { key:"customers", label:"Customers", Icon:Ic.Users },
     ]},
     { section:"Account", items:[
-      { key:"profile",   label:"Profile",   Icon:Ic.Profile}
+      { key:"profile",   label:"Profile",   Icon:Ic.Profile},
+      { key:"settings",  label:"Settings",  Icon:Ic.Settings  }
     ]},
   ]
   return (
